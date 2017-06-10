@@ -20,7 +20,7 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
 
     [Header("Timings (seconds)")]
     [SerializeField]
-    private float frameDuration;
+    private float frameDuration = .1f;
     [SerializeField]
     private float loopDuration;
 
@@ -37,7 +37,12 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
     /// </summary>
     private void MakeTimingsConsistent()
     {
-        float frameCount = transform.childCount;
+        int frameCount = transform.childCount;
+
+        if (frameCount == 0)
+        {
+            return;
+        }
 
         if (_prevFrameCount != frameCount)
         {
@@ -52,7 +57,7 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
             frameDuration = loopDuration / frameCount;
         }
 
-        _prevFrameCount = transform.childCount;
+        _prevFrameCount = frameCount;
         _prevFrameDuration = frameDuration;
         _prevLoopDuration = loopDuration;
     }
@@ -71,14 +76,9 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
     /// </summary>
     private void AdvanceTime(float duration)
     {
-        if (duration == 0)
-        {
-            duration = frameDuration;
-        }
-
         timeSinceCurrentFrame += duration;
         
-        while (timeSinceCurrentFrame > frameDuration)
+        while (timeSinceCurrentFrame > frameDuration && frameDuration > 0)
         {
             timeSinceCurrentFrame -= frameDuration;
 

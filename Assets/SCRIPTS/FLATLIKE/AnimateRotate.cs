@@ -27,7 +27,7 @@ public class AnimateRotate : MonoBehaviour
     {
         if (_prevTurnSpeed != turnSpeed)
         {
-            turnDuration = turnSpeed / 360f;
+            turnDuration = 360f / Mathf.Abs(turnSpeed);
         }
         else if (_prevTurnDuration != turnDuration)
         {
