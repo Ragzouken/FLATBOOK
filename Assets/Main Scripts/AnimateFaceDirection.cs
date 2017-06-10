@@ -10,31 +10,51 @@ using Random = UnityEngine.Random;
 
 public class AnimateFaceDirection : MonoBehaviour 
 {
+    public bool resetWhenStationary;
+
+    [Header("Timings (seconds??)")]
     public float rotateTime;
 
-    private bool started;
+    private float startAngle;
     private Vector2 prevPosition;
     private float angleVelocity;
+
+    private void Awake()
+    {
+        prevPosition = transform.position;
+        startAngle = transform.eulerAngles.z;
+    }
 
     private void LateUpdate()
     {
         Vector2 nextPosition = transform.position;
+        Vector2 delta = nextPosition - prevPosition;
+        Vector3 angles = transform.eulerAngles;
 
-        if (started)
+        float target; 
+
+        if (delta.magnitude > 0.001f)
         {
-            Vector2 delta = nextPosition - prevPosition;
-
-            float angle = Mathf.Atan2(delta.y, delta.x);
-
-            Vector3 angles = transform.eulerAngles;
-            angles.z = Mathf.SmoothDampAngle(angles.z, 
-                                             angle * Mathf.Rad2Deg,
-                                             ref angleVelocity,
-                                             rotateTime);
-            transform.eulerAngles = angles;
+            target = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
         }
+        else
+        {
+            if (resetWhenStationary)
+            {
+                target = startAngle;
+            }
+            else
+            {
+                target = angles.z;
+            }
+        }
+        
+        angles.z = Mathf.SmoothDampAngle(angles.z,
+                                         target,
+                                         ref angleVelocity,
+                                         rotateTime);
+        transform.eulerAngles = angles;
 
         prevPosition = nextPosition;
-        started = true;
     }
 }
