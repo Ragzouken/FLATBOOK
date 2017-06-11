@@ -20,9 +20,14 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
 
     [Header("Timings (seconds)")]
     [SerializeField]
+    [Tooltip("How many seconds each frame is shown for")]
     private float frameDuration = .1f;
     [SerializeField]
+    [Tooltip("How many seconds it takes the animation to complete")]
     private float loopDuration;
+    [SerializeField]
+    [Tooltip("Should the animation start part way through a random frame?")]
+    private bool startOnRandomTime;
 
     private float timeSinceCurrentFrame;
 
@@ -62,6 +67,15 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
         _prevLoopDuration = loopDuration;
     }
     #endregion
+
+    private void Start()
+    {
+        if (startOnRandomTime)
+        {
+            currentFrame = Random.Range(0, transform.childCount);
+            timeSinceCurrentFrame = Random.value * frameDuration;
+        }
+    }
 
     private void Update()
     {
