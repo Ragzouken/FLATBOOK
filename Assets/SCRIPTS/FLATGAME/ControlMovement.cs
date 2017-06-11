@@ -2,20 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ControlSimpleMovement : MonoBehaviour
+public class ControlMovement : MonoBehaviour
 {
-    public float movementPerSecond = 3;
+    [Tooltip("Should this object move relative to the direction it is facing?")]
+    public bool relativeMovement;
+    [Tooltip("How many units of distance does this object move per second?")]
+    public float movementSpeed = 3;
 
     [Header("Keyboard Input")]
     public KeyCode upKey = KeyCode.W;
     public KeyCode leftKey = KeyCode.A;
     public KeyCode rightKey = KeyCode.D;
     public KeyCode downKey = KeyCode.S;
-
-    public KeyCode upKeyAlt = KeyCode.None;
-    public KeyCode leftKeyAlt = KeyCode.None;
-    public KeyCode rightKeyAlt = KeyCode.None;
-    public KeyCode downKeyAlt = KeyCode.None;
 
     private void Update()
     {
@@ -26,26 +24,35 @@ public class ControlSimpleMovement : MonoBehaviour
     {
         var direction = Vector3.zero;
 
-        if (Input.GetKey(leftKey) || Input.GetKey(leftKeyAlt))
+        if (Input.GetKey(leftKey))
         {
             direction -= new Vector3(1, 0, 0);
         }
 
-        if (Input.GetKey(rightKey) || Input.GetKey(rightKeyAlt))
+        if (Input.GetKey(rightKey))
         {
             direction += new Vector3(1, 0, 0);
         }
 
-        if (Input.GetKey(upKey) || Input.GetKey(upKeyAlt))
+        if (Input.GetKey(upKey))
         {
             direction += new Vector3(0, 1, 0);
         }
 
-        if (Input.GetKey(downKey) || Input.GetKey(downKeyAlt))
+        if (Input.GetKey(downKey))
         {
             direction -= new Vector3(0, 1, 0);
         }
 
-        transform.Translate(direction * movementPerSecond * Time.deltaTime);
+        Vector2 displacement = direction * movementSpeed * Time.deltaTime;
+
+        if (relativeMovement)
+        {
+            transform.Translate(displacement, Space.Self);
+        }
+        else
+        {
+            transform.Translate(displacement, Space.World);
+        }
     }
 }
