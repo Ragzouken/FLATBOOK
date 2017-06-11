@@ -14,7 +14,7 @@ using Random = UnityEngine.Random;
 /// </summary>
 [ExecuteInEditMode]
 [DisallowMultipleComponent]
-public class AnimateHeirarchyFlipbook : MonoBehaviour 
+public class AnimateFlipbook : MonoBehaviour 
 {
     public int currentFrame;
 
