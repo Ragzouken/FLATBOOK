@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 using Random = UnityEngine.Random;
 
+[DisallowMultipleComponent]
 public class AnimateFaceDirection : MonoBehaviour 
 {
     public bool resetWhenStationary;

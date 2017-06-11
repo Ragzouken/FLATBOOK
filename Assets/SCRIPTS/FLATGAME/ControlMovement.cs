@@ -17,11 +17,6 @@ public class ControlMovement : MonoBehaviour
 
     private void Update()
     {
-        UpdateMovement();
-    }
-
-    void UpdateMovement()
-    {
         var direction = Vector3.zero;
 
         if (Input.GetKey(leftKey))
@@ -44,6 +39,10 @@ public class ControlMovement : MonoBehaviour
             direction -= new Vector3(0, 1, 0);
         }
 
+        // Time.deltaTime tells us how many seconds have passed since we last
+        // updated the movement - we multiply by movementSpeed to work out
+        // how far that many seconds of movement takes us, and multiply by
+        // direction to work out the final vector of movement
         Vector2 displacement = direction * movementSpeed * Time.deltaTime;
 
         if (relativeMovement)

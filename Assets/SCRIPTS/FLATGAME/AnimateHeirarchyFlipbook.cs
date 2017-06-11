@@ -13,21 +13,22 @@ using Random = UnityEngine.Random;
 /// turning them off and on in sequence, ensuring only one is ever on at a time
 /// </summary>
 [ExecuteInEditMode]
+[DisallowMultipleComponent]
 public class AnimateHeirarchyFlipbook : MonoBehaviour 
 {
-    [SerializeField]
-    private int currentFrame;
+    public int currentFrame;
 
     [Header("Timings (seconds)")]
-    [SerializeField]
     [Tooltip("How many seconds each frame is shown for")]
-    private float frameDuration = .1f;
-    [SerializeField]
+    public float frameDuration = .1f;
     [Tooltip("How many seconds it takes the animation to complete")]
-    private float loopDuration;
-    [SerializeField]
+    public float loopDuration;
     [Tooltip("Should the animation start part way through a random frame?")]
-    private bool startOnRandomTime;
+    public bool startOnRandomTime;
+
+    [Header("Editor")]
+    [Tooltip("Should we rename frame objects in the heirarchy as a reminder?")]
+    public bool renameFrames = true;
 
     private float timeSinceCurrentFrame;
 
@@ -66,6 +67,14 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
         _prevFrameDuration = frameDuration;
         _prevLoopDuration = loopDuration;
     }
+
+    private void RenameFrames()
+    {
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            transform.GetChild(i).name = "Frame " + (i + 1);
+        }
+    }
     #endregion
 
     private void Start()
@@ -80,6 +89,7 @@ public class AnimateHeirarchyFlipbook : MonoBehaviour
     private void Update()
     {
         MakeTimingsConsistent();
+        RenameFrames();
 
         AdvanceTime(Time.deltaTime);
     }
