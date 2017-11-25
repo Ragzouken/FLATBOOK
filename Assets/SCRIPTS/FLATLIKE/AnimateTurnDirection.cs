@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 [DisallowMultipleComponent]
-public class AnimateFaceDirection : MonoBehaviour 
+public class AnimateTurnDirection : MonoBehaviour 
 {
     public bool resetWhenStationary;
 
@@ -19,6 +19,7 @@ public class AnimateFaceDirection : MonoBehaviour
     private float startAngle;
     private Vector2 prevPosition;
     private float angleVelocity;
+    private bool flipped;
 
     private void Awake()
     {
@@ -31,6 +32,7 @@ public class AnimateFaceDirection : MonoBehaviour
         Vector2 nextPosition = transform.position;
         Vector2 delta = nextPosition - prevPosition;
         Vector3 angles = transform.eulerAngles;
+        float angle = transform.eulerAngles.z;
 
         float target; 
 
@@ -46,11 +48,11 @@ public class AnimateFaceDirection : MonoBehaviour
             }
             else
             {
-                target = angles.z;
+                target = angle;
             }
         }
         
-        angles.z = Mathf.SmoothDampAngle(angles.z,
+        angles.z = Mathf.SmoothDampAngle(angle,
                                          target,
                                          ref angleVelocity,
                                          rotateTime);
